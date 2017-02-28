@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="PredefinedFilters.widget.PredefinedFilters" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+<widget id="PredefinedFilters.widget.PredefinedFilters" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
     <name>PredefinedFilters</name>
     <description>The description of this widget.</description>
 
     <icon />
 
     <properties>
-        <property key="dummyKey" type="string" required="false" defaultValue="">
-            <caption>Dummy key</caption>
-            <category>Appearance</category>
-            <description>This key was added to make the widget work in the Modeler (needs atleast 1 key). Please change/remove this one</description>
+        <property key="gridName" type="string" required="true" defaultValue="grid1">
+            <caption>Name of the Mendix grid</caption>
+            <category>General</category>
+            <description></description>
+        </property>
+        <property key="filters" type="object" required="false" isList="true">
+            <caption>XPATH filters</caption>
+            <category>General</category>
+            <description></description>
+            <properties>
+                <property key="xpathstring" type="string" required="true">
+                    <caption>XPATH query</caption>
+                    <category>Filters</category>
+                    <description>The XPATH query to run</description>
+                </property>
+                <property key="buttontext" type="string" required="true">
+                    <caption>Button Text</caption>
+                    <category>Filters</category>
+                    <description>The Text to show on the Button</description>
+                </property>
+            </properties>
         </property>
     </properties>
 </widget>
