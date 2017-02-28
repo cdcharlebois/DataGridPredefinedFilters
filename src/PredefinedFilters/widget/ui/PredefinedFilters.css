@@ -1,3 +1,6 @@
-.widgetname {
-
+.dgfilter-button:not(:first-child) {
+  margin-left: 5px;
+}
+.dgfilter-button > span.glyphicon {
+  margin-right: 0.2em;
 }

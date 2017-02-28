@@ -34,6 +34,9 @@ define([
         // modeler
         gridName: null,
         filters: null,
+        showFilterIcon: null,
+        extraClass: null,
+        showAll: null,
 
 
         constructor: function() {
@@ -66,9 +69,16 @@ define([
                         this._dataType = "unsupported";
                         break;
                 }
+                var defaultSet = this.filters.filter(function(f) {
+                    return f.isdefault;
+                });
+                if (defaultSet) {
+                    this._applyFilter(defaultSet[0].xpathstring);
+                }
             } else {
                 console.log('Found a DOM node but it\'s not the grid widget');
             }
+
 
             this._contextObj = obj;
             this._updateRendering(callback);
@@ -82,17 +92,54 @@ define([
             logger.debug(this.id + ".uninitialize");
         },
 
+        _attachButtonToGrid: function(buttonNode) {
+            var grid = this._gridNode,
+                button = buttonNode
+                // ,   toolbar = grid.querySelector('.mx-grid-toolbar');
+                ,
+                toolbar = grid.querySelector('.mx-grid-search-inputs'),
+                filterbar = toolbar.querySelector('.mx-filters');
+
+            if (filterbar) {
+                filterbar.appendChild(button);
+            } else {
+                var fb = document.createElement('div');
+                fb.className = 'mx-filters';
+                fb.appendChild(button);
+                toolbar.appendChild(fb);
+            }
+
+            // toolbar.appendChild(button);
+        },
+
         _addSearchButtons: function(map) {
+            if (this.showAll) {
+                map.push({
+                    xpathstring: '',
+                    buttontext: 'All',
+                    isdefault: false
+                });
+            }
+
             map.forEach(lang.hitch(this, function(filter) {
                 console.log(filter);
-                var buttonEl = document.createElement('button');
-                buttonEl.innerText = filter.buttontext;
-                buttonEl.className = 'btn btn-default dgfilter';
+                var iconEl = document.createElement('span'),
+                    buttonEl = document.createElement('button');
+                if (this.showFilterIcon) {
+                    iconEl.className = 'glyphicon glyphicon-filter';
+                    buttonEl.appendChild(iconEl);
+                }
+                buttonEl.appendChild(document.createTextNode(filter.buttontext));
+                buttonEl.className = 'mx-button btn btn-default dgfilter-button ';
+                if (this.extraClass != '') {
+                    buttonEl.className += this.extraClass;
+                }
                 buttonEl.dataset.filter = filter.xpathstring;
-                this._gridNode.appendChild(buttonEl);
-
+                // this._gridNode.appendChild(buttonEl);
+                this._attachButtonToGrid(buttonEl);
                 // filter.xpathstring
                 // filter.buttontext
+                // filter.isdefault
             }));
         },
 
@@ -100,23 +147,27 @@ define([
             var grid = this._grid,
                 datasource = grid._dataSource;
 
+            // clearTimeout(this._searchTimeout);
+
             if (this._dataType === 'xpath') {
-                this._searchTimeout = setTimeout(lang.hitch(this, function() {
+                // this._searchTimeout = setTimeout(lang.hitch(this, function() {
                     datasource.setConstraints(xpath);
                     grid.reload();
-                }), 500);
+                // }), 500);
+            }
+            else {
+              console.log('unsupported grid type :(');
             }
         },
 
         _setupEvents: function() {
-            $('.dgfilter').on('click', lang.hitch(this, function(e) {
-              try{
-                var filter = e.target.dataset.filter;
-                this._applyFilter(filter);
-              }
-              catch (e) {
-                console.log('predefined filter: ' + filter + ' has failed.');
-              }
+            $('.dgfilter-button').on('click', lang.hitch(this, function(e) {
+                try {
+                    var filter = e.target.dataset.filter;
+                    this._applyFilter(filter);
+                } catch (e) {
+                    console.log('predefined filter: ' + filter + ' has failed.');
+                }
             }));
         },
 
