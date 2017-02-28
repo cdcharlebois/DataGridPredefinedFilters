@@ -72,7 +72,7 @@ define([
                 var defaultSet = this.filters.filter(function(f) {
                     return f.isdefault;
                 });
-                if (defaultSet) {
+                if (defaultSet.length > 0) {
                     this._applyFilter(defaultSet[0].xpathstring);
                 }
             } else {
