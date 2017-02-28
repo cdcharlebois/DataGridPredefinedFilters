@@ -172,7 +172,7 @@ define([
         },
 
         _getGridNode: function(gridName) {
-            return document.querySelector(".mx-name-" + gridName);
+            return this.domNode.parentElement.querySelector(".mx-name-" + gridName);
         },
 
         _updateRendering: function(callback) {
