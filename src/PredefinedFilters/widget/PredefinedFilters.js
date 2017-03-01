@@ -49,11 +49,11 @@ define([
 
         update: function(obj, callback) {
             logger.debug(this.id + ".update");
-            console.log('updating');
+            // console.log('updating');
 
             // Find the grid
             this._gridNode = this._getGridNode(this.gridName);
-            console.log(this._gridNode);
+            // console.log(this._gridNode);
             if (this._gridNode) {
                 this._grid = dijit.registry.byNode(this._gridNode);
                 this._addSearchButtons(this.filters);
@@ -124,7 +124,7 @@ define([
             }
 
             map.forEach(lang.hitch(this, function(filter) {
-                console.log(filter);
+                // console.log(filter);
                 var iconEl = document.createElement('span'),
                     buttonEl = document.createElement('button');
                 if (this.showFilterIcon) {
@@ -163,7 +163,7 @@ define([
         },
 
         _setupEvents: function() {
-            $('.dgfilter-button').on('click', lang.hitch(this, function(e) {
+            $('.mx-name-'+this.gridName+' .dgfilter-button').on('click', lang.hitch(this, function(e) {
                 try {
                     var filter = e.target.dataset.filter;
                     this._applyFilter(filter);
