@@ -73,7 +73,9 @@ define([
                     return f.isdefault;
                 });
                 if (defaultSet.length > 0) {
-                    this._applyFilter(defaultSet[0].xpathstring);
+                    setTimeout(lang.hitch(this, function(){
+                      lang.hitch(this, this._applyFilter(defaultSet[0].xpathstring));
+                    }), 500);
                 }
             } else {
                 console.log('Found a DOM node but it\'s not the grid widget');
