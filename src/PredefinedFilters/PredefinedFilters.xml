@@ -10,13 +10,18 @@
 
 
     <properties>
+         <property key="isListView" type="boolean" required="true" defaultValue="false">
+             <caption>ListView</caption>
+             <category>General</category>
+             <description>This widget (might) also work on ListViews. Use with caution</description>
+         </property>
          <property key="showFilterIcon" type="boolean" required="true" defaultValue="true">
              <caption>Show Filter Icon</caption>
              <category>General</category>
              <description>Should we include the filter icon on the button?</description>
          </property>
         <property key="gridName" type="string" required="true" defaultValue="grid1">
-            <caption>Name of the Mendix grid</caption>
+            <caption>Name of the Mendix grid (or listView)</caption>
             <category>General</category>
             <description></description>
         </property>

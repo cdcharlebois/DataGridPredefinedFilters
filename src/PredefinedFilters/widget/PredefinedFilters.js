@@ -27,9 +27,9 @@ define([
         // Internal variables.
         _handles: null,
         _contextObj: null,
-        _grid: null,
+        _clx: null,
         _searchTimeout: null,
-        _gridNode: null,
+        _clxNode: null,
         _datatype: null,
         // modeler
         gridName: null,
@@ -37,6 +37,7 @@ define([
         showFilterIcon: null,
         extraClass: null,
         showAll: null,
+        isListView: null,
 
 
         constructor: function() {
@@ -52,29 +53,35 @@ define([
             // console.log('updating');
 
             // Find the grid
-            this._gridNode = this._getGridNode(this.gridName);
-            // console.log(this._gridNode);
-            if (this._gridNode) {
-                this._grid = dijit.registry.byNode(this._gridNode);
+            this._clxNode = this._getCollectionNode(this.gridName);
+            // console.log(this._clxNode);
+            if (this._clxNode) {
+                this._clx = dijit.registry.byNode(this._clxNode);
                 this._addSearchButtons(this.filters);
-                switch (this._grid.config.datasource.type) {
-                    case "entityPath":
-                    case "microflow":
-                        this._dataType = "local";
-                        break;
-                    case "xpath":
-                        this._dataType = "xpath";
-                        break;
-                    default:
-                        this._dataType = "unsupported";
-                        break;
+                if (this.isListView){
+                  this._dataType = "xpath";
                 }
+                else {
+                  switch (this._clx.config.datasource.type) {
+                      case "entityPath":
+                      case "microflow":
+                          this._dataType = "local";
+                          break;
+                      case "xpath":
+                          this._dataType = "xpath";
+                          break;
+                      default:
+                          this._dataType = "unsupported";
+                          break;
+                  }
+                }
+
                 var defaultSet = this.filters.filter(function(f) {
                     return f.isdefault;
                 });
                 if (defaultSet.length > 0) {
-                    setTimeout(lang.hitch(this, function(){
-                      lang.hitch(this, this._applyFilter(defaultSet[0].xpathstring));
+                    setTimeout(lang.hitch(this, function() {
+                        lang.hitch(this, this._applyFilter(defaultSet[0].xpathstring));
                     }), 500);
                 }
             } else {
@@ -94,8 +101,12 @@ define([
             logger.debug(this.id + ".uninitialize");
         },
 
+        _attachButtonToListView: function(buttonNode){
+          this._clxNode.querySelector('.mx-listview-searchbar').appendChild(buttonNode);
+        },
+
         _attachButtonToGrid: function(buttonNode) {
-            var grid = this._gridNode,
+            var grid = this._clxNode,
                 button = buttonNode
                 // ,   toolbar = grid.querySelector('.mx-grid-toolbar');
                 ,
@@ -137,8 +148,13 @@ define([
                     buttonEl.className += this.extraClass;
                 }
                 buttonEl.dataset.filter = filter.xpathstring;
-                // this._gridNode.appendChild(buttonEl);
-                this._attachButtonToGrid(buttonEl);
+                // this._clxNode.appendChild(buttonEl);
+                if (this.isListView) {
+                    this._attachButtonToListView(buttonEl);
+                } else {
+                    this._attachButtonToGrid(buttonEl);
+                }
+
                 // filter.xpathstring
                 // filter.buttontext
                 // filter.isdefault
@@ -146,24 +162,28 @@ define([
         },
 
         _applyFilter: function(xpath) {
-            var grid = this._grid,
-                datasource = grid._dataSource;
-
-            // clearTimeout(this._searchTimeout);
-
-            if (this._dataType === 'xpath') {
-                // this._searchTimeout = setTimeout(lang.hitch(this, function() {
+            if (this.isListView) {
+                //LISTVIEW
+                var lv = this._clx,
+                    datasource = lv._datasource;
+                datasource.setConstraints(xpath);
+                lv.update();
+            } else {
+                //DATAGRID
+                var grid = this._clx,
+                    datasource = grid._dataSource;
+                if (this._dataType === 'xpath') {
                     datasource.setConstraints(xpath);
                     grid.reload();
-                // }), 500);
+                } else {
+                    console.log('unsupported grid type :(');
+                }
             }
-            else {
-              console.log('unsupported grid type :(');
-            }
+
         },
 
         _setupEvents: function() {
-            $('.mx-name-'+this.gridName+' .dgfilter-button').on('click', lang.hitch(this, function(e) {
+            $('.mx-name-' + this.gridName + ' .dgfilter-button').on('click', lang.hitch(this, function(e) {
                 try {
                     var filter = e.target.dataset.filter;
                     this._applyFilter(filter);
@@ -173,8 +193,8 @@ define([
             }));
         },
 
-        _getGridNode: function(gridName) {
-            return this.domNode.parentElement.querySelector(".mx-name-" + gridName);
+        _getCollectionNode: function(name) {
+            return this.domNode.parentElement.querySelector(".mx-name-" + name);
         },
 
         _updateRendering: function(callback) {
