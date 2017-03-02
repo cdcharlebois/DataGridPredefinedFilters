@@ -17,22 +17,22 @@
          </property>
          <property key="showFilterIcon" type="boolean" required="true" defaultValue="true">
              <caption>Show Filter Icon</caption>
-             <category>General</category>
+             <category>Appearance</category>
              <description>Should we include the filter icon on the button?</description>
          </property>
         <property key="gridName" type="string" required="true" defaultValue="grid1">
-            <caption>Name of the Mendix grid (or listView)</caption>
+            <caption>Mendix Name</caption>
             <category>General</category>
-            <description></description>
+            <description>The name of the Mendix Grid (or ListView)</description>
         </property>
         <property key="extraClass" type="string" required="false" defaultValue="">
             <caption>CSS Class for Buttons</caption>
-            <category>General</category>
+            <category>Appearance</category>
             <description>Extra class(es) for buttons.</description>
         </property>
         <property key="showAll" type="boolean" required="true" defaultValue="true">
             <caption>Show All Button</caption>
-            <category>General</category>
+            <category>Appearance</category>
             <description>Add an "All" button that shows all records</description>
         </property>
         <property key="filters" type="object" required="false" isList="true">
