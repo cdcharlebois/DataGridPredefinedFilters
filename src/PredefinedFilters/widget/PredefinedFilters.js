@@ -58,22 +58,21 @@ define([
             if (this._clxNode) {
                 this._clx = dijit.registry.byNode(this._clxNode);
                 this._addSearchButtons(this.filters);
-                if (this.isListView){
-                  this._dataType = "xpath";
-                }
-                else {
-                  switch (this._clx.config.datasource.type) {
-                      case "entityPath":
-                      case "microflow":
-                          this._dataType = "local";
-                          break;
-                      case "xpath":
-                          this._dataType = "xpath";
-                          break;
-                      default:
-                          this._dataType = "unsupported";
-                          break;
-                  }
+                if (this.isListView) {
+                    this._dataType = "xpath";
+                } else {
+                    switch (this._clx.config.datasource.type) {
+                        case "entityPath":
+                        case "microflow":
+                            this._dataType = "local";
+                            break;
+                        case "xpath":
+                            this._dataType = "xpath";
+                            break;
+                        default:
+                            this._dataType = "unsupported";
+                            break;
+                    }
                 }
 
                 var defaultSet = this.filters.filter(function(f) {
@@ -101,15 +100,25 @@ define([
             logger.debug(this.id + ".uninitialize");
         },
 
-        _attachButtonToListView: function(buttonNode){
-          this._clxNode.querySelector('.mx-listview-searchbar').appendChild(buttonNode);
+        _attachButtonToListView: function(buttonNode) {
+            var lv = this._clxNode,
+                button = buttonNode,
+                filterbar = lv.querySelector('.mx-filters');
+
+            if (filterbar) {
+                filterbar.appendChild(button);
+            } else {
+                var fb = document.createElement('div');
+                fb.className = 'mx-filters';
+                fb.appendChild(button);
+                this._clxNode.insertBefore(fb, this._clxNode.firstChild);
+            }
+            // this._clxNode.querySelector('.mx-listview-searchbar').appendChild(buttonNode);
         },
 
         _attachButtonToGrid: function(buttonNode) {
             var grid = this._clxNode,
-                button = buttonNode
-                // ,   toolbar = grid.querySelector('.mx-grid-toolbar');
-                ,
+                button = buttonNode,
                 toolbar = grid.querySelector('.mx-grid-search-inputs'),
                 filterbar = toolbar.querySelector('.mx-filters');
 
