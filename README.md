@@ -12,10 +12,12 @@ Widget allows you to specify xpath queries in the model and then display buttons
     1. On the **General** tab, Configure:
         1. `ListView` : set this to "Yes" if you want to add filters to a ListView, otherwise, leave false.
         2. `Mendix Name` : set the name of the Mendix element you're filtering, like "grid1" or "listView1".
+        3. **(Context Version Only)** `Enumeration` : select the enumeration to use for the default filter.
         3. `XPATH filters`:
             1. `XPATH query` : the xpath query to run on this collection when the button is clicked. (It's often helpful to build this query in the actual XPATH builder for the collection element and then copy and paste in here)
             2. `Button text` : the text to show on the button.
             3. `Is Default?` : if "Yes", this filter will run on pageload. (only set this to "Yes" for one filter.)
+            4. **(Context Version Only)** `Enum Key` : The value of the `Enumeration` field that will cause this filter to be applied by default.
     2. On the **Appearance** tab, Configure:
         1. `Show Filter Icon` : Set to "Yes" to display the Filter glyphicon on the buttons.
         2. `CSS Class for Buttons` : Any extra classes to add to the buttons
@@ -24,6 +26,8 @@ Widget allows you to specify xpath queries in the model and then display buttons
 ### Typical usage scenario
 
 Useful for when you're currently using tabs to show Data Grids with different filters i.e. (My Tasks, My Open Tasks, All Tasks)
+
+### [Video](https://www.useloom.com/share/f34185d4460a4e21b2f852539752e602)
 
 ### Known Limitations
 
