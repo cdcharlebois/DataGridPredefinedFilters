@@ -38,7 +38,7 @@
         <property key="baseEnum" type="attribute" required="true" isPath="optional" pathType="reference">
             <caption>Enumeration</caption>
             <category>General</category>
-            <description></description>
+            <description>If you want to display a default filter based on an Enumeration value, enter that here.</description>
             <attributeTypes>
                 <attributeType name="Enum" />
             </attributeTypes>
