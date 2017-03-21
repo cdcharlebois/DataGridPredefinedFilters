@@ -7,6 +7,7 @@ require([
         //extra modeler variable
         baseEnum: null,
         update: function (obj, callback) {
+            this._contextObj = obj;
             logger.debug(this.id + ".update");
             // console.log('updating');
 
@@ -58,9 +59,26 @@ require([
             }
 
 
-            this._contextObj = obj;
+            
             this._updateRendering(callback);
-        }
+        },
+
+        _createButtonElement: function (f) {
+            var iconEl = document.createElement('span'),
+                buttonEl = document.createElement('button');
+            if (this.showFilterIcon) {
+                iconEl.className = 'glyphicon glyphicon-filter';
+                buttonEl.appendChild(iconEl);
+            }
+            buttonEl.appendChild(document.createTextNode(f.buttontext ? f.buttontext : f.enumkey));
+            buttonEl.className = 'mx-button btn btn-default dgfilter-button ';
+            if (this.extraClass != '') {
+                buttonEl.className += this.extraClass;
+            }
+            buttonEl.dataset.filter = f.xpathstring;
+
+            return buttonEl;
+        },
 
         
     })

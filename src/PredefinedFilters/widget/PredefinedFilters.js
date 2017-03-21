@@ -48,7 +48,8 @@ define([
             logger.debug(this.id + ".postCreate");
         },
 
-        update: function(obj, callback) {
+        update: function (obj, callback) {
+            this._contextObj = obj;
             logger.debug(this.id + ".update");
             // console.log('updating');
 
@@ -86,7 +87,7 @@ define([
             }
 
 
-            this._contextObj = obj;
+            
             this._updateRendering(callback);
         },
 
@@ -149,18 +150,7 @@ define([
 
             map.forEach(lang.hitch(this, function(filter) {
                 // console.log(filter);
-                var iconEl = document.createElement('span'),
-                    buttonEl = document.createElement('button');
-                if (this.showFilterIcon) {
-                    iconEl.className = 'glyphicon glyphicon-filter';
-                    buttonEl.appendChild(iconEl);
-                }
-                buttonEl.appendChild(document.createTextNode(filter.buttontext));
-                buttonEl.className = 'mx-button btn btn-default dgfilter-button ';
-                if (this.extraClass != '') {
-                    buttonEl.className += this.extraClass;
-                }
-                buttonEl.dataset.filter = filter.xpathstring;
+                var buttonEl = this._createButtonElement(filter);
                 // this._clxNode.appendChild(buttonEl);
                 if (this.isListView) {
                     this._attachButtonToListView(buttonEl);
@@ -173,6 +163,25 @@ define([
                 // filter.isdefault
             }));
         },
+
+
+        _createButtonElement: function (f) {
+            var iconEl = document.createElement('span'),
+                buttonEl = document.createElement('button');
+            if (this.showFilterIcon) {
+                iconEl.className = 'glyphicon glyphicon-filter';
+                buttonEl.appendChild(iconEl);
+            }
+            buttonEl.appendChild(document.createTextNode(f.buttontext));
+            buttonEl.className = 'mx-button btn btn-default dgfilter-button ';
+            if (this.extraClass != '') {
+                buttonEl.className += this.extraClass;
+            }
+            buttonEl.dataset.filter = f.xpathstring;
+            
+            return buttonEl;
+        },
+
 
         _applyFilter: function(xpath) {
             if (this.isListView) {

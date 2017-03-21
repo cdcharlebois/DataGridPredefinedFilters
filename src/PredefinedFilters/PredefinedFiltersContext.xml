@@ -53,7 +53,7 @@
                     <category>Filters</category>
                     <description>The XPATH query to run</description>
                 </property>
-                <property key="buttontext" type="string" required="true">
+                <property key="buttontext" type="string" required="false">
                     <caption>Button Text</caption>
                     <category>Filters</category>
                     <description>The Text to show on the Button</description>
