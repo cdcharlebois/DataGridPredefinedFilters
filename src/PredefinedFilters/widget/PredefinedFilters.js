@@ -79,9 +79,7 @@ define([
                     return f.isdefault;
                 });
                 if (defaultSet.length > 0) {
-                    setTimeout(lang.hitch(this, function() {
-                        lang.hitch(this, this._applyFilter(defaultSet[0].xpathstring));
-                    }), 500);
+                    lang.hitch(this, this._setInitialFilter(defaultSet[0].xpathstring));
                 }
             } else {
                 console.log('Found a DOM node but it\'s not the grid widget');
@@ -98,6 +96,12 @@ define([
 
         uninitialize: function() {
             logger.debug(this.id + ".uninitialize");
+        },
+
+        _setInitialFilter: function (xpathstring) {
+            setTimeout(lang.hitch(this, function () {
+                lang.hitch(this, this._applyFilter(xpathstring));
+            }), 500);
         },
 
         _attachButtonToListView: function(buttonNode) {
